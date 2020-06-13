@@ -1,20 +1,5 @@
 <template>
 	<div class="hello" >
-		<div @click="change">
-			add
-		</div>
-		<div>
-			{{ testForm.data }}
-		</div>
-		<div>
-			<div>
-				valid: {{ testForm.valid }}
-			</div>
-			<div>
-				id: {{ testForm.id }}
-			</div>
-		</div>
-		<input v-model = 'testForm.data'>
 	</div>
 </template>
 
@@ -23,51 +8,23 @@ import { Component , Props , Watch , Computed , Hook , Refs , Emit } from './cal
 
 import Vue from 'vue' ;
 import Test from './test' ;
+import { FormBuilder } from '../dto/model' ;
+import { Validator } from "../dto/validator";
 
-import { DTO , NotNull , Mix , Description , MinLen } from '../form' ;
-
-@DTO
-class BaseDto {
-	id = 123 ;
-
-	@NotNull aaa
-}
-
-@DTO
-@Mix(BaseDto)
-class DataTransObject {
-
-	constructor() {
-	}
-
-	@NotNull
-	@MinLen(5)
-	@Description("data不能为空")
-	data
-}
-
-const message = {
-	warning: ( tip ) => {
-		alert( tip )
-	}
-}
 @Component({ components: { Test }})
 export default class Hello extends Vue{
-	change(  ) {
+	change() {
 	}
 
 	filter(id, definition) {
 	}
 
-	testForm = new DataTransObject( message );
 
 	@Hook created () {
-		this.testForm.change$
-			.filter( item => item.event === 'update' )
-			.map( item => item.value )
-			.subscribe( res => {
-				console.log( this.testForm )
-			})
+		const b = FormBuilder.group({
+			a: [ null , [Validator.required ] ]
+		});
+		console.log( b ) ;
 	}
 }
 </script>

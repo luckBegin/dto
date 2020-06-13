@@ -28,4 +28,8 @@ export class Validator {
 			return _mergeErrors( _executeValidators( control , presentValidators ) ) ;
 		};
 	}
+
+	static required( formControl ) {
+		return formControl.value === 12 ? null : { 'invalid': true };
+	}
 }
