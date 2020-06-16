@@ -1,5 +1,6 @@
 <template>
 	<div class="hello" >
+		<input v-model = 'test' type="text" @input="inputChange">
 	</div>
 </template>
 
@@ -16,15 +17,22 @@ export default class Hello extends Vue{
 	change() {
 	}
 
+	test ;
+
 	filter(id, definition) {
 	}
 
-
+	form = FormBuilder.group({
+		a: [ null , [Validator.min(5) ] ]
+	})
 	@Hook created () {
-		const b = FormBuilder.group({
-			a: [ null , [Validator.required ] ]
-		});
-		console.log( b ) ;
+	}
+
+	inputChange() {
+		this.form.patchValue({
+			a: this.test
+		})
+		console.log( this.form )
 	}
 }
 </script>

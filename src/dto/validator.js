@@ -32,4 +32,10 @@ export class Validator {
 	static required( formControl ) {
 		return formControl.value === 12 ? null : { 'invalid': true };
 	}
+
+	static min( number ) {
+		return function( control ) {
+			return (control.value || '').length === number ? null : { 'invalid': true };
+		}
+	}
 }

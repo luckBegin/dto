@@ -10,8 +10,8 @@ export default class Test {
 
 	@Emit("change")
 	close() {
+
 		return 123 ;
 	}
-
 }
 </script>

@@ -256,7 +256,7 @@ export class AbstractControl {
 		if( this._allControlsDisabled() ) return DISABLED ;
 		if( this.errors ) return INVALID ;
 		if( this._anyControlsDirty(PENDING) ) return PENDING ;
-		if( this._anyControlsDirty(INVALID) ) return INVALID ;
+		if( this._anyControlsHaveStatus(INVALID) ) return INVALID ;
 		return VALID ;
 	}
 
@@ -385,7 +385,7 @@ export class FormControl extends AbstractControl {
 	 * @param { Any } value
 	 * @param { {onlySelf: boolean  , emitEvent: boolean } } opts
 	 */
-	patchValue( value , opts ) {
+	patchValue( value , opts = { onlySelf: false } ) {
 		this.setValue( value , opts ) ;
 	}
 
@@ -466,6 +466,18 @@ export class FormGroup extends AbstractControl{
 	 */
 	_forEachChild(cb) {
 		Object.keys(this.controls).forEach( k => cb(this.controls[k] , k )) ;
+	}
+
+	_anyControls(condition) {
+		let res = false;
+		this._forEachChild((control , name) => {
+			res = res || (this.contains(name) && condition(control));
+		});
+		return res;
+	}
+
+	contains(controlName) {
+		return this.controls.hasOwnProperty(controlName) && this.controls[controlName].enabled;
 	}
 
 	/**
@@ -549,7 +561,7 @@ export class FormGroup extends AbstractControl{
 		});
 	}
 
-	patchValue( value , opts ) {
+	patchValue( value , opts = { emitEvent: false } ) {
 		Object.keys(value).forEach( name => {
 			if( this.controls.hasOwnProperty(name) ) {
 				this.controls[name].patchValue(value[name], {onlySelf: true, emitEvent: opts.emitEvent});
@@ -559,7 +571,7 @@ export class FormGroup extends AbstractControl{
 
 	reset( value, opts ) {
 		this._forEachChild( control => {
-			control.reset(value[name], {onlySelf: true, emitEvent: opts.emitEvent});
+			control.reset(value[name], {onlySelf: false, emitEvent: opts.emitEvent});
 		});
 		this._updatePristine(opts);
 		this.updateValueAndValidity(opts) ;
