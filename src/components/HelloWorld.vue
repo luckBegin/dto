@@ -1,38 +1,38 @@
 <template>
 	<div class="hello" >
-		<input v-model = 'test' type="text" @input="inputChange">
+		<input v-model = 'test.id' type="text" @input="inputChange">
 	</div>
 </template>
 
 <script>
 import { Component , Props , Watch , Computed , Hook , Refs , Emit } from './calss.decorator' ;
-
+import { DTO , Validators } from '../dto/dto' ;
 import Vue from 'vue' ;
 import Test from './test' ;
-import { FormBuilder } from '../dto/model' ;
+import { FormBuilder} from '../dto/model' ;
 import { Validator } from "../dto/validator";
+
+@DTO
+class Query {
+
+	@Validators([Validator.required])
+	id = 1 ;
+}
 
 @Component({ components: { Test }})
 export default class Hello extends Vue{
 	change() {
 	}
 
-	test ;
+	test = new Query;
 
 	filter(id, definition) {
 	}
 
-	form = FormBuilder.group({
-		a: [ null , [Validator.min(5) ] ]
-	})
 	@Hook created () {
 	}
 
 	inputChange() {
-		this.form.patchValue({
-			a: this.test
-		})
-		console.log( this.form )
 	}
 }
 </script>
