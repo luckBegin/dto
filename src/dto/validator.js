@@ -30,12 +30,18 @@ export class Validator {
 	}
 
 	static required( formControl ) {
-		return formControl.value === 12 ? null : { 'invalid': true };
+		return  emptyValue(formControl.value)  ? { 'invalid': true } : null ;
 	}
 
-	static min( number ) {
+	static len( number ) {
 		return function( control ) {
 			return (control.value || '').length === number ? null : { 'invalid': true };
 		}
 	}
 }
+
+
+
+const emptyValue = ( val ) => {
+	return val === '' || val === undefined || val === null || val === 'undefined' || val === 'null' ;
+};
