@@ -11,6 +11,7 @@ export const DTO = function( target ) {
 	Object.keys(config).forEach( key => {
 		formConfig[key] = [ iniData[key] ? iniData[key] : ''  , config[key].validator ] ;
 	});
+
 	return class _Data{
 		constructor() {
 			this.form = FormBuilder.group( formConfig ) ;
@@ -46,16 +47,27 @@ export const DTO = function( target ) {
 		markAsDirty() {
 			this.form.markAsDirty() ;
 		}
+
+		getErrors() {
+			console.log( iniData ) ;
+		}
 	}
 }
 
 export const Validators = function( validators ) {
 	return function ( target , propertyKey )  {
 		const config = ( target['config'] ||  ( target['config'] = {}) ) ;
-		if( !config[propertyKey] ) {
+		if( !config[propertyKey] || !config[propertyKey].validator ) {
 			( config[propertyKey] || ( config[propertyKey] = {} ) ).validator = validators ;
 		} else {
 			config[propertyKey].validator.concat(validators) ;
 		}
+	}
+}
+
+export const Desc = function( desc ) {
+	return function( target , propertyKey ) {
+		const config = ( target['config'] ||  ( target['config'] = {}) ) ;
+		( config[propertyKey] || ( config[propertyKey] = {} ) ).desc = desc ;
 	}
 }

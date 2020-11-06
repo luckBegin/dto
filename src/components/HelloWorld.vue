@@ -6,7 +6,7 @@
 
 <script>
 import { Component , Props , Watch , Computed , Hook , Refs , Emit } from './calss.decorator' ;
-import { DTO , Validators } from '../dto/dto' ;
+import {Desc, DTO, Validators} from '../dto/dto' ;
 import Vue from 'vue' ;
 import Test from './test' ;
 import { FormBuilder} from '../dto/model' ;
@@ -16,7 +16,11 @@ import { Validator } from "../dto/validator";
 class Query {
 
 	@Validators([Validator.required])
+	@Desc('adsasdasd')
 	id = 1 ;
+
+	@Validators([Validator.required])
+	aaa = 1 ;
 }
 
 @Component({ components: { Test }})
@@ -30,6 +34,7 @@ export default class Hello extends Vue{
 	}
 
 	@Hook created () {
+		console.log( this.test.getErrors() ) ;
 	}
 
 	inputChange() {
